@@ -22,8 +22,8 @@ for i in range(2,ICDCharite_Zeilenzahl):
     current_icd_value=ICDCharite_worksheet[('A'+str(i))].value
     current_icd_catalog=ICDCharite_worksheet[('B'+str(i))].value
     #Depending whether the catalog is to be considered as well. Be aware, that catalg can be for example "ICD10 2007", which then can't be found in ATHENA vocabulary.
-    #query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE '",str(current_icd_catalog),"%' AND concept_code LIKE '", str(current_icd_value), "'"])
-    query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'ICD%' AND concept_code LIKE '", str(current_icd_value), "'"])
+    #query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE '",str(current_icd_catalog),"%' AND concept_code LIKE '", str(current_icd_value), "%'"])
+    query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'ICD%' AND concept_code LIKE '", str(current_icd_value), "%'"])
     cur.execute(query)
     QueryErgebnis = cur.fetchall()
     ICDKatalog =[]
