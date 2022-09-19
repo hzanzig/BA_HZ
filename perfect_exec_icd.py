@@ -26,15 +26,15 @@ for i in range(2,ICDCharite_Zeilenzahl):
     QueryErgebnis = cur.fetchall()
     if cur.rowcount == 0:
         toappend = [current_icd_value, current_icd_catalog, 0,0]
-        ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
+        ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
     else:
         ICDKatalog =[]
         for z in range(0,cur.rowcount):
             ICDKatalog.append(QueryErgebnis[z][3])
         toappend = [current_icd_value, current_icd_catalog, str(ICDKatalog),cur.rowcount]
-        ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
+        ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
 
-ResultsDataframeOPS.to_csv('OPS_full_results.csv')
+ResultsDataframeICD.to_csv('OPS_full_results.csv')
 # close the communication with the PostgreSQL
 cur.close()
 if conn is not None:
