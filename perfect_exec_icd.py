@@ -21,20 +21,19 @@ for i in range(2,ICDCharite_Zeilenzahl):
     print(str(i)+"/"+str(ICDCharite_Zeilenzahl))
     current_icd_value=ICDCharite_worksheet[('A'+str(i))].value
     current_icd_catalog=ICDCharite_worksheet[('B'+str(i))].value
-    query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE '",str(current_icd_catalog),"%' AND concept_code LIKE '", str(current_icd_value), "'"])
+    #Depending whether the catalog is to be considered as well. Be aware, that catalg can be for example "ICD10 2007", which then can't be found in ATHENA vocabulary.
+    #query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE '",str(current_icd_catalog),"%' AND concept_code LIKE '", str(current_icd_value), "'"])
+    query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'ICD%' AND concept_code LIKE '", str(current_icd_value), "'"])
     cur.execute(query)
     QueryErgebnis = cur.fetchall()
-    if cur.rowcount == 0:
-        toappend = [current_icd_value, current_icd_catalog, 0,0]
-        ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
-    else:
-        ICDKatalog =[]
-        for z in range(0,cur.rowcount):
-            ICDKatalog.append(QueryErgebnis[z][3])
-        toappend = [current_icd_value, current_icd_catalog, str(ICDKatalog),cur.rowcount]
-        ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
+    ICDKatalog =[]
+    for z in range(0,cur.rowcount):
+        ICDKatalog.append(QueryErgebnis[z][3])
+    toappend = [current_icd_value, current_icd_catalog, str(ICDKatalog),cur.rowcount]
+    ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
 
-ResultsDataframeICD.to_csv('OPS_full_results.csv')
+ResultsDataframeICD.to_csv('ICD_full_results.csv')
+
 # close the communication with the PostgreSQL
 cur.close()
 if conn is not None:
