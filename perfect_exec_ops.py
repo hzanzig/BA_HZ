@@ -20,21 +20,18 @@ cur = conn.cursor()
 for i in range(2,OPSCharite_Zeilenzahl):
     print(str(i)+"/"+str(OPSCharite_Zeilenzahl))
     current_ops_value=OPSCharite_worksheet[('A'+str(i))].value
-    current_ops_value = current_ops_value.lower() #all letters to lowercase, as the SQL querry is case sensitive and the codes from ATHENA only consist of lowercase letters
+    current_ops_value = current_ops_value.lower() #all letters to lowercase, as the SQL querry is case sensitive and the codes from ATHENA only consist of lowercase 
     query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'OPS%' AND concept_code LIKE '", str(current_ops_value), "%'"])
     cur.execute(query)
     QueryErgebnis = cur.fetchall()
-    if cur.rowcount == 0:
-        toappend = [current_ops_value, OPSCharite_worksheet[('B'+str(i))].value,0,0]
-        ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
-    else:
-        OPSKatalog =[]
-        for z in range(0,cur.rowcount):
-            OPSKatalog.append(QueryErgebnis[z][3])
-        toappend = [current_ops_value, OPSCharite_worksheet[('B'+str(i))].value, str(OPSKatalog),cur.rowcount]
-        ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
+    OPSKatalog =[]
+    for z in range(0,cur.rowcount):
+        OPSKatalog.append(QueryErgebnis[z][3])
+    toappend = [current_ops_value, OPSCharite_worksheet[('B'+str(i))].value, str(OPSKatalog),cur.rowcount]
+    ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
 
 ResultsDataframeOPS.to_csv('OPS_full_results.csv')
+
 # close the communication with the PostgreSQL
 cur.close()
 if conn is not None:
