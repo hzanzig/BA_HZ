@@ -26,8 +26,8 @@ for i in range(2,OPSCharite_Zeilenzahl):
     QueryErgebnis = cur.fetchall()
     OPSKatalog =[]
     for z in range(0,cur.rowcount):
-        OPSKatalog.append(QueryErgebnis[z][3])
-    toappend = [current_ops_value, OPSCharite_worksheet[('B'+str(i))].value, str(OPSKatalog),cur.rowcount]
+        OPSCatalog.append(QueryErgebnis[z][3])
+    toappend = [current_ops_value, OPSCharite_worksheet[('B'+str(i))].value, str(OPSCatalog),cur.rowcount]
     ResultsDataframeOPS = ResultsDataframeOPS.append(pd.Series(toappend, index=ResultsDataframeOPS.columns[:len(toappend)]), ignore_index=True)
 
 ResultsDataframeOPS.to_csv('OPS_full_results.csv')
