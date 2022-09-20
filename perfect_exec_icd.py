@@ -28,8 +28,8 @@ for i in range(2,ICDCharite_Zeilenzahl):
     QueryErgebnis = cur.fetchall()
     ICDKatalog =[]
     for z in range(0,cur.rowcount):
-        ICDKatalog.append(QueryErgebnis[z][3])
-    toappend = [current_icd_value, current_icd_catalog, str(ICDKatalog),cur.rowcount]
+        ICDCatalog.append(QueryErgebnis[z][3])
+    toappend = [current_icd_value, current_icd_catalog, str(ICDCatalog),cur.rowcount]
     ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
 
 ResultsDataframeICD.to_csv('ICD_full_results.csv')
