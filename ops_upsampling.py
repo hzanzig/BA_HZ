@@ -9,13 +9,14 @@ from config import config
 import pandas as pd
 from operator import concat
 
+# loading the result excel file of the mapping process
 OPSCharite_object3 = load_workbook(r'C:\Users\handb\Documents\GitHub\BA_HZ\OPSCharite_result_3.xlsx')
 OPSCharite_result3_worksheet1 = OPSCharite_object3['Sheet 1']
 OPSCharite_result3_worksheet2 = OPSCharite_object3['Sheet 2']
 OPSCharite_result3_worksheet3 = OPSCharite_object3['Sheet 3']
 OPSCharite_result3_worksheet4 = OPSCharite_object3['Sheet 4']
-
 worksheets3 = [OPSCharite_result3_worksheet1,OPSCharite_result3_worksheet2,OPSCharite_result3_worksheet3,OPSCharite_result3_worksheet4]
+#creating the result dataframe of the upsampling process
 ResultsDataframeops = pd.DataFrame({"c_procedure_1":[], "c_procedure_katalog_1":[],"mapped_katalog":[],"number_of_mappings":[],"number_of_upsamplings":[],"matchable_code":[]})
 
 conn = None
@@ -33,18 +34,22 @@ for i in range(0,len(worksheets3)):
         ops_value = str(test[('A'+str(j))].value)
         try:
             if str(test[('E'+str(j))].value) == '0':
+                # check if the mapping was unsuccessful
                 print("sheet"+str(i+1)+","+str(j)+"/4,"+str(worksheets3[i].max_row))
                 ops_valuestrip=ops_value
                 upsampling = 0
                 x = 0
+                # shortening the ops code with every while iteration
                 while x ==0:
                     ops_valuestrip=ops_valuestrip[:-1]
                     query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'OPS%' AND concept_code LIKE '", str(ops_valuestrip), "%'"])
+                    #the sql query searches with a wildcard at the end of the stripped code in the database
                     cur.execute(query)
                     QueryErgebnis = cur.fetchall()
                     upsampling = upsampling+1
                     x = cur.rowcount
                 opsKatalog =[]
+                #as many results can occur, which could corrupt the excel table format, the found catalogs will be reduced to the first 100.
                 if cur.rowcount > 100:
                     for z in range(0,100):
                         opsKatalog.append(QueryErgebnis[z][3])
