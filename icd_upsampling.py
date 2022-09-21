@@ -29,23 +29,23 @@ cur = conn.cursor()
 
 for i in range(0,len(worksheets)):
     for j in range(2,worksheets[i].max_row):
-        test=worksheets[i]
-        icd_value = str(test[('A'+str(j))].value)
+        excelsheet=worksheets[i]
+        icd_value = str(excelsheet[('A'+str(j))].value)
         try:
             # check if the mapping was unsuccessful
-            if str(test[('C'+str(j))].value) == '0':
+            if str(excelsheet[('C'+str(j))].value) == '0':
                 icd_valuestrip=icd_value
                 upsampling = 0
-                x = 0
+                whileexit = 0
                 # shortening the icd code with every while iteration
-                while x ==0:
+                while whileexit ==0:
                     icd_valuestrip=icd_valuestrip[:-1]
                     #the sql query searches with a wildcard at the end of the stripped code in the database
                     query = "".join(['SELECT'," * FROM public.concept WHERE vocabulary_id LIKE 'ICD%' AND concept_code LIKE '", str(icd_valuestrip), "%'"])
                     cur.execute(query)
                     QueryErgebnis = cur.fetchall()
                     upsampling = upsampling+1
-                    x = cur.rowcount
+                    whileexit = cur.rowcount
                 ICDCatalog =[]
                 #as many results can occur, which could corrupt the excel table format, the found catalogs will be reduced to the first 100.
                 if cur.rowcount > 100:
@@ -54,12 +54,12 @@ for i in range(0,len(worksheets)):
                 else:
                     for z in range(0,cur.rowcount):
                         ICDCatalog.append(QueryErgebnis[z][3])
-                toappend = [icd_value, test[('B'+str(j))].value,ICDCatalog, cur.rowcount,upsampling,str(icd_valuestrip)]
+                toappend = [icd_value, excelsheet[('B'+str(j))].value,ICDCatalog, cur.rowcount,upsampling,str(icd_valuestrip)]
                 ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
             else:
                 skipIf
         except:
-            toappend = [icd_value, test[('B'+str(j))].value,"NA","NA","NA","NA"]
+            toappend = [icd_value, excelsheet[('B'+str(j))].value,"NA","NA","NA","NA"]
             ResultsDataframeICD = ResultsDataframeICD.append(pd.Series(toappend, index=ResultsDataframeICD.columns[:len(toappend)]), ignore_index=True)
 
 ResultsDataframeICD.to_csv('ICD_upsampling.csv')
