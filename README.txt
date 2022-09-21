@@ -13,17 +13,19 @@ The following two are the original data files provided by the Charité Berlin:
 icd_diagnosis_full_charite.xlsx
 ops_codes_full_charite.xlsx
 
-The follwing five data files are the result files of the ICD and OPS mapping process. As the OPS mapping process had to be redone two times, 
-there are different versions of results. the ops_full_result.csv file is the final OPS result file. 
+The following seven data files are the result files of the ICD and OPS mapping process. As the OPS mapping process had to be redone two times, 
+there are different versions of results. The ops_full_result.csv file is the final OPS result file. 
 
 icd_full_results.csv
+icd_upsampling.csv
 OPSCharite_result.xlsx
 OPSCharite_result2.xlsx
 OPSCharite_result3.xlsx
 ops_full_result.csv
+OPS_upsampling.csv
 
 
-In addition to the result files, there are 12 codefiles. 
+In addition to the result files, there are 14 code files. 
 
 .gitignore
 database.ini
@@ -37,11 +39,13 @@ ops_review.py
 ConcatExcelSheetsToyCsv.py
 perfect_exec_icd.py
 perfect_exec_ops.py
+icd_upsampling.py
+ops_upsampling.py
 
 Explanation to the code files: 
-database.ini holds the information for the database connection, which is initiated within the python scripzts with the help of the config.py file. 
-icd_mapping.py, as well as ops_mapping with it's different versions, hold the code for the conceptual mapping process of the original 
-Chrité data to the ATHENA vocabulary. The SQL querys are within those codes. 
+database.ini holds the information for the database connection, which is initiated within the python scripts with the help of the config.py file. 
+icd_mapping.py, as well as ops_mapping with its different versions, hold the code for the conceptual mapping process of the original 
+Charité data to the ATHENA vocabulary. The SQL queries are within those codes. 
 
 icd_review.py and ops_review.py are the files which review the results produced by the *mapping.py code files.
 As the initial coding used the python extension "xlwt" and it's function "Workbook", which limits the user to only being able to write the first 65,536 rows 
@@ -49,9 +53,11 @@ of a Excel sheet, the ConcatExcelSheetsToyCsv.py code is used to reduce the four
 This is done with the help of data frames, a functionality of the python extension "pandas".
 
 perfect_exec_icd.py and perfect_exec_ops.py is the reduced and adjusted code, which directly uses dataframes and ops_mapping issues were fixed in this version. 
-In general these files are the ones, which should be taken into further consideration for future mapping processes. 
+In general, these files are the ones, which should be taken into further consideration for future mapping processes. 
+
+icd_upsampling.py and ops_upsampling.py are the scripts for an upsampling process, in order to reduce data loss. 
 
 The ATHENA vocabulary is not included within this repository, as the rights remain at the Odysseus Data Services, Inc.
 The OHDSI ATHENA repository can be found here: https://athena.ohdsi.org/search-terms/start
 
-Please note that the download of additional python extensions, for example "pandas", is neccessary that the code works. 
+Please note that the download of additional python extensions, for example "pandas", is necessary that the code works. 
