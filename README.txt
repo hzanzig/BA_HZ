@@ -13,8 +13,9 @@ The following two are the original data files provided by the Charité Berlin:
 icd_diagnosis_full_charite.xlsx
 ops_codes_full_charite.xlsx
 
-The following seven data files are the result files of the ICD and OPS mapping process. As the OPS mapping process had to be redone two times, 
-there are different versions of results. The ops_full_result.csv file is the final OPS result file. 
+The following eight data files are the result files of the ICD and OPS mapping process. As the OPS mapping process had to be redone two times, 
+there are different versions of results. The ops_full_result.csv file is the final OPS result file. The list_of_mismatches.csv file holds all
+mismatched ICD and OPS (of final version) codes.
 
 icd_full_results.csv
 icd_upsampling.csv
@@ -23,6 +24,7 @@ OPSCharite_result2.xlsx
 OPSCharite_result3.xlsx
 ops_full_result.csv
 OPS_upsampling.csv
+list_of_mismatches.csv
 
 
 In addition to the result files, there are 14 code files. 
